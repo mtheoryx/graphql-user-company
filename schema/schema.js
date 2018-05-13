@@ -20,6 +20,7 @@ const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLInt,
+  GraphQLList,
   GraphQLSchema
 } = graphql;
 
@@ -56,7 +57,13 @@ const RootQuery = new GraphQLObjectType({
       type: UserType,
       args: { id: { type: GraphQLString } },
       resolve(parentValue, args) {
-        return _.find(users, { id: args.id })
+        return _.find(users, { id: args.id });
+      }
+    },
+    users: {
+      type: new GraphQLList(UserType),
+      resolve(parentValue) {
+        return users;
       }
     }
   }
