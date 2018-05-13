@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "develop:db": "json-server db.json",
+    "develop:db": "json-server --watch db.json",
     "develop:server": "node server.js",
     "develop": "npm-run-all --parallel develop:db develop:server"
   },
