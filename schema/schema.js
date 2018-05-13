@@ -14,7 +14,7 @@
  */
 
 const graphql = require('graphql');
-const _ = require('lodash'); //I don't think we need this, but whatevs
+const axios = require ('axios');
 
 const {
   GraphQLObjectType,
@@ -24,19 +24,6 @@ const {
   GraphQLSchema
 } = graphql;
 
-// What is a user?
-const users = [
-  { id: '23', firstName: 'Bill', age: 20 },
-  { id: '42', firstName: 'Samantha', age: 30 }
-];
-/** 
- * id: Integer
- * firstName: String
- * company_id: Integer
- * position_id: Integer
- * users: Array<User>
- * 
- */
 const UserType = new GraphQLObjectType({
   name: 'User',
   description: '...', //Optional
@@ -57,13 +44,17 @@ const RootQuery = new GraphQLObjectType({
       type: UserType,
       args: { id: { type: GraphQLString } },
       resolve(parentValue, args) {
-        return _.find(users, { id: args.id });
+        return axios
+          .get(`http://localhost:3000/users/${args.id}`)
+          .then(response => response.data);
       }
     },
     getAllUsers: {
       type: new GraphQLList(UserType),
-      resolve(parentValue) {
-        return users;
+      resolve() {
+        return axios
+          .get(`http://localhost:3000/users/`)
+          .then(response => response.data);
       }
     }
   }
